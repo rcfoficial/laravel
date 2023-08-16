@@ -10,7 +10,12 @@ fi
 
 npm install
 composer install
+composer dump-autoload
 php artisan migrate
+php artisan optimize
+php artisan config:clear
+php artisan cache:clear
+php artisan migrate:refresh --force
 chmod -R ugo+rw /.composer
 
 if [ ! -z "$PORT" ]; then
@@ -22,7 +27,7 @@ if [ ! "$?" -eq 0 ]; then
     php artisan key:generate
 fi
 
-if [ $# -gt 0 ];then
+if [ $# -gt 0 ]; then
     exec gosu $WWWUSER "$@"
 else
     /usr/bin/supervisord
